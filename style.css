@@ -1,0 +1,50 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+canvas {
+  vertical-align: top;
+}
+
+.speedCase {
+  width: 15rem;
+  height: 15rem;
+  background-color: #222b45;
+  position: absolute;
+  bottom: 15rem;
+  right: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+}
+
+.speedText {
+  color: #ffffff;
+  font-size: 1.5rem;
+  padding-bottom: 1rem;
+}
+
+[type="number"] {
+  font-size: 1rem;
+  border-radius: 9px;
+  padding-left: 4px;
+  padding-right: 4px;
+  text-align: center;
+  outline: none;
+  -moz-appearance: textfield;
+}
+
+input {
+  border-style: hidden;
+}
+
+.no-outline:focus {
+  outline: none;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
