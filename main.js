@@ -5,21 +5,65 @@ let y;
 let direction;
 let speed;
 
-// there are four possible directions of the ant [up,right,down,left] in a clockwise direction
-let UP = 0;
-let RIGHT = 1;
-let DOWN = 2;
-let LEFT = 3;
+// P5 populates the global namespace making it difficult to keep track of its variables
+// an instance is created to  give specific definitions of variables
+let initP5 = new p5(Sketch);
+const width = initP5.windowWidth;
+const height = initP5.windowHeight;
 
-// create the default values where ant will start at the center of the grid
-// PS: The center of the grid is gotten by dividing width and height by 2 respectively
-// PS: The initial direction of the ant is UP [value of 0]
-function setup() {
-  createCanvas(windowWidth, windowHeight);
-  grid = gridArray(width, height);
-  x = width / 2;
-  y = height / 2;
-  direction = UP;
+// there are four possible directions of the ant [up,right,down,left] in a clockwise direction
+const UP = 0;
+const RIGHT = 1;
+const DOWN = 2;
+const LEFT = 3;
+
+function Sketch(p) {
+  //NOTE: The "p" props is passed by p5 hence allowing the use of p5's attributes within the local space of the function
+
+  // create the default values where ant will start at the center of the grid
+  // PS: The center of the grid is gotten by dividing width and height by 2 respectively
+  // PS: The initial direction of the ant is UP [value of 0]
+  p.setup = function () {
+    p.createCanvas(width, height);
+    grid = gridArray(width, height);
+    x = width / 2;
+    y = height / 2;
+    direction = UP;
+  };
+
+  // the lines are drawn using P5 canvas and color(255)=white, color("#222b45")=black
+  // The state is the current color and its either 0 or 1(i.e white, black)
+  // PS: the loop is the number of cycle per instance i.e the drawing speed
+  p.draw = function () {
+    p.strokeWeight(1);
+    speed = document.getElementById("speed").value;
+
+    if (speed > 1000) {
+      speed = 1000;
+    }
+
+    for (let n = 0; n < speed; n++) {
+      let state = grid[x][y];
+
+      if (state == 0) {
+        turnRight();
+        grid[x][y] = 1;
+      } else if (state == 1) {
+        turnLeft();
+        grid[x][y] = 0;
+      }
+
+      p.stroke(p.color(255));
+
+      if (grid[x][y] == 1) {
+        p.stroke(p.color("#222b45")); //color(0)
+      }
+
+      p.point(x, y);
+
+      moveForward();
+    }
+  };
 }
 
 // increasing the direction's value simulates a right turn
@@ -68,43 +112,7 @@ function moveForward() {
   }
 }
 
-// the lines are drawn using P5 canvas and color(255)=white, color("#222b45")=black
-// The state is the current color and its either 0 or 1(i.e white, black)
-// PS: the loop is the number of cycle per instance i.e the drawing speed
-function draw() {
-  strokeWeight(1);
-  speed = document.getElementById("speed").value;
-
-  if (speed > 1000) {
-    speed = 1000
-  }
-  for (let n = 0; n < speed; n++) {
-    let state = grid[x][y];
-    if (state == 0) {
-      turnRight();
-      grid[x][y] = 1;
-    } else if (state == 1) {
-      turnLeft();
-      grid[x][y] = 0;
-    }
-
-    stroke(color(255));
-    if (grid[x][y] == 1) {
-      stroke(color("#222b45")); //color(0)
-    }
-    point(x, y);
-    moveForward();
-  }
-}
-
 // Create a two dimensional array and fill it with zeros(0) to represent the rows and columns
-function gridArray(cols, rows) {
-  let arr = new Array(cols);
-  for (let i = 0; i < arr.length; i++) {
-    arr[i] = new Array(rows);
-    for (let j = 0; j < arr[i].length; j++) {
-      arr[i][j] = 0;
-    }
-  }
-  return arr;
+function gridArray(rows, cols) {
+  return Array.from(Array(rows), () => Array(cols).fill(0));
 }
